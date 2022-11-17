@@ -14,12 +14,14 @@
         <c:if test="${not empty empresa}">
             Empresa ${ empresa } cadastrada com sucesso!
         </c:if>
+        		<h5><a href="formNovaEmpresa.jsp">VOLTAR AO FORMULÁRIO</a></h5>
     Lista de empresas:
      <br />
-
     <ul>
         <c:forEach items="${empresas}" var="empresa">
             <li>${empresa.nome} <fmt:formatDate value="${empresa.dataAbertura}"  pattern="dd/MM/yyyy"/>
+              <a href="/gerenciador1/removeEmpresa?id=${empresa.id}">remover</a>
+              <a href="/gerenciador1/mostraEmpresa?id=${empresa.id}">editar</a>
             </li>
         </c:forEach>
     </ul>
