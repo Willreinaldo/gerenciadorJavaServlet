@@ -8,20 +8,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import gerenciador.modelo.Banco;
 
-public class RemoveEmpresa {
+public class RemoveEmpresa implements Acao{
 
-    public void executa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public String executa(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        System.out.println("removendo empresa");
+		System.out.println("removendo empresa");
 
-        String paramId = request.getParameter("id");
-        Integer id = Integer.valueOf(paramId);
+		String paramId = request.getParameter("id");
+		Integer id = Integer.valueOf(paramId);
 
-        System.out.println(id);
+		System.out.println(id);
 
-        Banco banco = new Banco();
-        banco.removeEmpresa(id);
+		Banco banco = new Banco();
+		banco.removeEmpresa(id);
 
-        response.sendRedirect("entrada?acao=ListaEmpresas");
-    } 
+		return "redirect:entrada?acao=ListaEmpresas";
+	}
 }

@@ -8,13 +8,19 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Java Standard Taglib</title>
+<title>Lista de E</title>
 </head>
-<body>
+		<c:import url="logout-parcial.jsp"/>
+		  Usuario Logado: <strong>${usuarioLogado.login } <strong/>
+
+    <br>
+    <br>
         <c:if test="${not empty empresa}">
             Empresa ${ empresa } cadastrada com sucesso!
         </c:if>
-        		<h5><a href="formNovaEmpresa.jsp">VOLTAR AO FORMULÁRIO</a></h5>
+        		<h5><a href="entrada?acao=NovaEmpresaForm">VOLTAR AO FORMULÁRIO</a></h5>
+        		    <hr>
+
     Lista de empresas:
      <br />
     <ul>

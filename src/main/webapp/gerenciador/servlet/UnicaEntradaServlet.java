@@ -2,17 +2,15 @@ package gerenciador.servlet;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import gerenciador.acao.AlteraEmpresa;
-import gerenciador.acao.ListaEmpresas;
-import gerenciador.acao.MostraEmpresa;
-import gerenciador.acao.NovaEmpresa;
-import gerenciador.acao.RemoveEmpresa;
+import gerenciador.acao.Acao;
 
 /**
  * Servlet implementation class UnicaEntradaServlet
@@ -24,31 +22,42 @@ public class UnicaEntradaServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 String paramAcao = request.getParameter("acao"); 
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+		
 
-	        if(paramAcao.equals("ListaEmpresas")) {
-	            ListaEmpresas acao = new ListaEmpresas();
-	            acao.executa(request, response);	            
-	        } else if(paramAcao.equals("RemoveEmpresa")) {
+	    String paramAcao = request.getParameter("acao"); 
 
-	            RemoveEmpresa acao = new RemoveEmpresa();
-	            acao.executa(request, response);
-	        } else if(paramAcao.equals("MostraEmpresa")) {
+	    HttpSession sessao = request.getSession();
+	    boolean usuarioNaoEstaLogado = (sessao.getAttribute("usuarioLogado") == null);
+        boolean ehUmaAcaoProtegida = !(paramAcao.equals("Login") || paramAcao.equals("LoginForm"));
 
-	            MostraEmpresa acao = new MostraEmpresa();
-	            acao.executa(request, response);
+	    if(ehUmaAcaoProtegida & usuarioNaoEstaLogado) {
+	        response.sendRedirect("entrada?acao=LoginForm");
+	        return;
+	    }
+			
+			String nomeDaClasse = "gerenciador.acao." + paramAcao;
+		    Acao acao;
+			try {
+				Class classe = Class.forName(nomeDaClasse);//carrega a classe com o nome 
+				acao = (Acao) classe.newInstance();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+
+				throw new ServletException(e);
+			} 
+			
+			
+	        String nome = acao.executa(request, response);
+			
+	        String[] tipoEEndereco = nome.split(":");
+	        if(tipoEEndereco[0].equals("forward")) {
+	            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/"+tipoEEndereco[1]);
+	            rd.forward(request, response);
+	        } else {
+	            response.sendRedirect(tipoEEndereco[1]);
+
 	        }
-	        
-	        else if (paramAcao.equals("AlteraEmpresa")) {
-	        	AlteraEmpresa acao = new AlteraEmpresa();
-	        	acao.executa(request, response);
-	        } 
-	        else if (paramAcao.equals("NovaEmpresa")) {
-	            NovaEmpresa acao = new NovaEmpresa();
-	            acao.executa(request, response);
-	    } 
-	        
+
 	}
 
 }
