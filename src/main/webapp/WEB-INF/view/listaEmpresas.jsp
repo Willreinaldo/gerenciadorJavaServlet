@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Lista de E</title>
+<title>Lista de Empresas</title>
 </head>
 		<c:import url="logout-parcial.jsp"/>
 		  Usuario Logado: <strong>${usuarioLogado.login } <strong/>

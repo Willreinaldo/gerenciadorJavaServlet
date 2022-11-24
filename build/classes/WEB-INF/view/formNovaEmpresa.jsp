@@ -12,9 +12,9 @@
 		  Usuario Logado: <strong>${usuarioLogado.login } <strong/>
 
     <br>
-    <hr>
 	<h5><a href="entrada?acao=ListaEmpresas">IR PARA LISTA DE EMPRESAS</a></h5>
-	
+	<hr>
+	<br>
 
     <form action="entrada?acao=NovaEmpresa" method="post">
 
